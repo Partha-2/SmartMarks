@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Smart Bookmarks Manager
 
-## Getting Started
+A simple, real-time bookmark manager built with Next.js, Supabase, and Tailwind CSS.
 
-First, run the development server:
+## Features
+- **Google OAuth**: Secure login using Google account.
+- **Private Data**: Users only see their own bookmarks (enforced by Supabase RLS).
+- **Real-time Sync**: Bookmark list updates instantly across tabs using Supabase Realtime.
+- **Modern UI**: Sleek, dark-mode focused design with Framer Motion animations.
+- **Responsive**: Works on mobile and desktop.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tech Stack
+- **Frontend**: Next.js 14 (App Router), Tailwind CSS, Framer Motion, Lucide React
+- **Backend/Auth**: Supabase (PostgreSQL, GoTrue, Realtime)
+- **Deployment**: Vercel
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Challenges Encountered & Solutions
+1. **Directory Naming Conflict**: The initial project folder `Abstrabit` had capital letters, which caused `create-next-app` to fail due to npm naming restrictions. I solved this by initializing the project in a temporary lowercase subfolder and moving the files to the root.
+2. **Real-time Filtering**: Ensuring real-time updates only triggered for the relevant user's data. I used Supabase's channel filtering (`user_id=eq.${user.id}`) to optimize and secure the real-time stream.
+3. **Session Persistence**: Managing auth state across page refreshes. I used Supabase's `onAuthStateChange` listener within a React Context Provider to ensure a consistent experience.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Setup Instructions
+1. Clone the repository.
+2. Run `npm install`.
+3. Create a `.env.local` file with your Supabase credentials:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_key
+   ```
+4. Run the SQL provided in `supabase_schema.sql` in your Supabase SQL Editor.
+5. `npm run dev` to start locally.
