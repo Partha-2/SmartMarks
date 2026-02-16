@@ -77,12 +77,21 @@ export default function BookmarkList() {
     }, [user]);
 
     const deleteBookmark = async (id: string) => {
+        // 1. Save original state for possible rollback
+        const originalBookmarks = [...bookmarks];
+
+        // 2. Optimistically update local state immediately
+        setBookmarks((prev) => prev.filter((b) => b.id !== id));
+
         try {
             const { error } = await supabase.from('bookmarks').delete().eq('id', id);
             if (error) throw error;
+            // Success! No further action needed as state is already updated.
         } catch (err: any) {
             console.error('Error deleting bookmark:', err);
-            alert('Failed to delete bookmark');
+            // 3. Rollback if server request fails
+            setBookmarks(originalBookmarks);
+            alert('Failed to delete bookmark. Please try again.');
         }
     };
 
